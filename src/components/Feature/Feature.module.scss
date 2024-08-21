@@ -1,0 +1,34 @@
+.feature {
+  background-color: #dbe5e1;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.featureWrap {
+  grid-column-gap: 80px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+.featureBlock {
+  grid-row-gap: 8px;
+  text-align: center;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+
+  img {
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+}
+
+.featureTitle {
+  color: #000;
+  margin-bottom: 2px;
+}

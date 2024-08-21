@@ -1,0 +1,31 @@
+.productCategory{
+    margin-top: 50px;
+    margin-bottom: 150px;
+}
+
+.categoryWrap {
+    grid-column-gap: 80px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+
+    a {
+        grid-row-gap: 8px;
+        color: #000;
+        text-align: center;
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: center;
+        text-decoration: none;
+        display: flex;
+
+        img {
+        transition: transform 0.2s ease-in-out;
+
+        }
+        &:hover img{
+            transform: translateY(-3px);
+        }
+
+    }
+}

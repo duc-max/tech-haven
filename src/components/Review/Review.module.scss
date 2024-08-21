@@ -1,0 +1,46 @@
+.reviewBlock {
+  grid-column-gap: 20px;
+  display: flex;
+}
+
+.reviewImg {
+  background-color: #fff;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 36%;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    min-height: 266px;
+    max-height: 266px;
+    vertical-align: middle;
+    max-width: 100%;
+    display: inline-block;
+  }
+}
+
+.reviewData {
+  display: flex;
+  grid-row-gap: 40px;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 64%;
+
+  p {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+}
+
+.clientName {
+  color: #000;
+}
+
+.bodySmall {
+  font-size: 14px;
+  line-height: 150%;
+}

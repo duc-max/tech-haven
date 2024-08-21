@@ -1,0 +1,38 @@
+.productImg {
+  background-color: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+
+  img {
+    vertical-align: middle;
+    max-width: 100%;
+    display: inline-block;
+    object-fit: cover;
+    width: 100%;
+    min-height: 380px;
+    max-height: 380px;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.productData {
+  margin-top: 15px;
+
+  h6 {
+    margin-bottom: 2px;
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+  span {
+    font-size: 14px;
+    color: #999;
+  }
+}

@@ -1,0 +1,95 @@
+.heroWrapper {
+  display: flex;
+  grid-column-gap: 60px;
+}
+
+.heroData {
+  grid-row-gap: 40px;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 38%;
+  display: flex;
+
+  .heroTextData {
+    grid-row-gap: 40px;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+    h1 {
+      margin-bottom: 30px;
+      font-size: 65px;
+      font-weight: 500;
+      line-height: 110%;
+    }
+    p {
+      color: #000;
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+  }
+}
+
+.heroImages {
+  grid-column-gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 62%;
+  display: flex;
+
+  .heroImage {
+    background-image: linear-gradient(rgba(204, 227, 232, 0), #cce3e8);
+    border-radius: 5px;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    max-width: 38%;
+    min-height: 308px;
+    max-height: 308px;
+    display: flex;
+    overflow: hidden;
+
+    img {
+      display: inline-block;
+      max-width: 100%;
+      min-height: 264px;
+      max-height: 264px;
+      vertical-align: middle;
+      opacity: 1;
+      transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg)
+        rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+      transform-style: preserve-3d;
+    }
+  }
+  .heroRight {
+    width: 100%;
+    max-width: 62%;
+    .heroMainImg {
+      background-image: linear-gradient(#edd5cb, rgba(237, 213, 203, 0));
+      border-radius: 5px;
+      justify-content: center;
+      align-items: center;
+      min-height: 580px;
+      max-height: 580px;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+
+    img {
+      vertical-align: middle;
+      max-width: 100%;
+      display: inline-block;
+      object-fit: cover;
+      min-height: 445px;
+      max-height: 445px;
+      opacity: 1;
+      transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg)
+        rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+      transform-style: preserve-3d;
+    }
+  }
+}

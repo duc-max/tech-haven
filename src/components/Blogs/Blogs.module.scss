@@ -1,0 +1,27 @@
+.postImg {
+  background-color: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+
+  img {
+    vertical-align: middle;
+    max-width: 100%;
+    display: inline-block;
+    object-fit: cover;
+    width: 100%;
+    min-height: 340px;
+    max-height: 340px;
+  }
+}
+
+.postData {
+  margin-top: 14px;
+
+  h4 {
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+}

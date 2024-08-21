@@ -1,0 +1,141 @@
+.footerWrap {
+  display: flex;
+  grid-column-gap: 100px;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.footerData {
+  display: flex;
+  grid-row-gap: 20px;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .address {
+    color: #999;
+    width: 100%;
+    max-width: 220px;
+    margin-bottom: 0;
+    font-size: 14px;
+  }
+}
+
+.footerTitle {
+  color: #fff;
+  padding-bottom: 2px;
+}
+
+.footerLink {
+  color: #999;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s;
+  &:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.footerMenuWrap {
+  display: flex;
+  grid-column-gap: 106px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.footerMenu {
+  display: flex;
+  grid-row-gap: 8px;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.footerLinkWrap {
+  display: flex;
+  grid-row-gap: 6px;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.newsletter {
+  margin-top: 12px;
+  margin-bottom: 0;
+
+  .newsletterForm {
+    grid-row-gap: 8px;
+    flex-flow: column;
+    display: flex;
+  }
+
+  .newsletterInput {
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    margin-bottom: 0;
+    padding: 10px 15px;
+    transition: border-color 0.3s;
+    color: #fff;
+    vertical-align: middle;
+    width: 100%;
+    height: 38px;
+    font-size: 14px;
+    line-height: 1.42857;
+    display: block;
+
+    &:focus {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .newsletterBtn {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px 26px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 130%;
+    transition: border-color 0.3s, background-color;
+
+    &:hover {
+      border-color: #f63;
+      background-color: #f63;
+    }
+  }
+}
+
+.footerBottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footerText {
+  grid-column-gap: 40px;
+  color: #999;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 14px;
+  display: flex;
+}
+
+.footerBtnLink {
+  grid-column-gap: 6px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  .dot {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+  }
+}
