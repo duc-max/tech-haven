@@ -63,16 +63,16 @@ function Footer() {
             <div className={clsx(style.footerMenu)}>
               <div className={clsx(style.footerTitle)}>Connected</div>
               <div className={clsx(style.footerLinkWrap)}>
-                <a href className={clsx(style.footerLink)}>
+                <a href="/" className={clsx(style.footerLink)}>
                   Instagram
                 </a>
-                <a href className={clsx(style.footerLink)}>
+                <a href="/" className={clsx(style.footerLink)}>
                   Facebook
                 </a>
-                <a href className={clsx(style.footerLink)}>
+                <a href="/" className={clsx(style.footerLink)}>
                   YouTube
                 </a>
-                <a href className={clsx(style.footerLink)}>
+                <a href="/" className={clsx(style.footerLink)}>
                   Twitter
                 </a>
               </div>

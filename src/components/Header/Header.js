@@ -2,8 +2,11 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { CiUser, CiShoppingCart, CiSearch } from "react-icons/ci";
 import { Fragment } from "react";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 
 import style from "./Header.module.scss";
+import config from "../../config/index";
+
 function Header() {
   return (
     <div className={clsx(style.headerContainer)}>
@@ -12,7 +15,9 @@ function Header() {
           <Fragment>
             <>
               <Navbar.Brand href="" className={clsx(style.headerTitle)}>
-                <h1>TechHaven</h1>
+                <Link to={config.router.home}>
+                  <h1>TechHaven</h1>
+                </Link>
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
@@ -46,7 +51,10 @@ function Header() {
                   <CiSearch />
                 </span>
               </div>
-              <CiUser className={clsx(style.headerIcon)} />
+              <Link to={config.router.login}>
+                {" "}
+                <CiUser className={clsx(style.headerIcon)} />
+              </Link>
               <CiShoppingCart className={clsx(style.headerIcon)} />
             </div>
           </Fragment>
