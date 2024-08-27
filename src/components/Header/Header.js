@@ -1,13 +1,23 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { CiUser, CiShoppingCart, CiSearch } from "react-icons/ci";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
+import { Tooltip, Divider } from "antd";
 
 import style from "./Header.module.scss";
 import config from "../../config/index";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsLogin } from "../../reducers/userReducer";
 
 function Header() {
+  const dispatch = useDispatch();
+  const { isLogin, currentUser } = useSelector((prev) => prev.users);
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      dispatch(setIsLogin(true));
+    }
+  }, [isLogin, dispatch]);
   return (
     <div className={clsx(style.headerContainer)}>
       <Navbar expand="lg" style={{ padding: "8px 0", height: "100%" }}>
@@ -51,10 +61,39 @@ function Header() {
                   <CiSearch />
                 </span>
               </div>
-              <Link to={config.router.login}>
-                {" "}
-                <CiUser className={clsx(style.headerIcon)} />
-              </Link>
+              {isLogin ? (
+                <Tooltip
+                  trigger="click"
+                  title={
+                    <div>
+                      <div className={clsx(style.userList)}>
+                        <span>Profile</span>
+                      </div>
+                      <div className={clsx(style.userList)}>
+                        <span>Order</span>
+                      </div>
+                      <Divider style={{ margin: "2px 0" }} />
+                      <div className={clsx(style.userList)}>
+                        <span>Logout</span>
+                      </div>
+                    </div>
+                  }
+                  color="#fff"
+                  overlayStyle={{ width: 150 }}
+                  overlayInnerStyle={{ padding: "0" }}
+                >
+                  <div className={clsx(style.userAvatar)}>
+                    <img
+                      src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+                      alt="avatar"
+                    />
+                  </div>
+                </Tooltip>
+              ) : (
+                <Link to={config.router.login}>
+                  <CiUser className={clsx(style.headerIcon)} />
+                </Link>
+              )}
               <CiShoppingCart className={clsx(style.headerIcon)} />
             </div>
           </Fragment>

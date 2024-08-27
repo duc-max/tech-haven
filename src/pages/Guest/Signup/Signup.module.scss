@@ -1,0 +1,114 @@
+.signupContainer {
+  display: flex;
+  width: 100%;
+  min-height: 80vh;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.signupWrap {
+  width: 600px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding-right: 55px;
+  padding-left: 55px;
+  padding-bottom: 54px;
+  padding-top: 65px;
+}
+
+.signupTitle {
+  display: block;
+  font-size: 39px;
+  color: #333;
+  line-height: 1.2;
+  text-align: center;
+  font-weight: 700;
+  padding-bottom: 49px;
+}
+
+.inputWrap {
+  width: 100%;
+  position: relative;
+  border-bottom: 2px solid #d9d9d9;
+  margin-bottom: 10px;
+
+  .inputLabel {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    padding-left: 7px;
+  }
+
+  input {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.2;
+    display: block;
+    width: 100%;
+    height: 50px;
+    background: 0 0;
+    padding: 0 7px 0 10px;
+  }
+}
+
+.inputBlock {
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  font-size: 20px;
+  color: #adadad;
+}
+
+.hasAccount {
+  text-align: right;
+  margin: 26px 0;
+
+  a {
+    color: blue;
+    &:hover {
+      color: #ff9000;
+      text-decoration: underline;
+    }
+  }
+}
+
+.btnLoginWrap {
+  width: 100%;
+  display: block;
+  position: relative;
+  z-index: 1;
+  border-radius: 25px;
+  overflow: hidden;
+  margin: 0 auto;
+  button {
+    font-size: 16px;
+    color: #fff;
+    background: linear-gradient(to right, #00dbde, #fc00ff, #00dbde, #fc00ff);
+    background-size: 200% 100%;
+    line-height: 1.2;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    width: 100%;
+    height: 50px;
+    transition: background-position 0.5s ease;
+
+    &:hover {
+      background-position: right center;
+    }
+  }
+}
+
+.error {
+  color: red;
+}
