@@ -3,24 +3,22 @@ import SectionTitle from "../SectionTitle/SectionTitle";
 import ProductItem from "../ProductItem";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchProducts } from "../../reducers/productReducer";
+import { getProductsLatest } from "../../reducers/productReducer";
 
 function LatestProducts() {
   const dispatch = useDispatch();
-  const { products, status, error } = useSelector((state) => state.products);
+  const { productsLatest } = useSelector((state) => state.products);
 
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchProducts());
-    }
-  }, [dispatch, status]);
+    dispatch(getProductsLatest());
+  }, [dispatch]);
 
   return (
     <section style={{ marginBottom: "150px" }}>
       <Container>
         <SectionTitle title={"Latest Products"} />
         <Row>
-          {products.map((product, index) => {
+          {productsLatest.map((product, index) => {
             return (
               <Col md={3} key={index}>
                 <ProductItem product={product} />

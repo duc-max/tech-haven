@@ -1,0 +1,72 @@
+.pageTitle {
+  padding-top: 60px;
+  padding-bottom: 60px;
+
+  h1 {
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 120%;
+  }
+}
+
+.aboutWrap {
+  grid-column-gap: 60px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+.aboutImg {
+  border-radius: 5px;
+  width: 100%;
+  max-width: 50%;
+  position: relative;
+  overflow: hidden;
+  img {
+    vertical-align: middle;
+    max-width: 100%;
+    display: inline-block;
+    width: 100%;
+    border: 0;
+  }
+}
+
+.aboutData {
+  grid-row-gap: 120px;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 50%;
+  display: flex;
+
+  .aboutTitle {
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 120%;
+  }
+}
+
+.aboutFacts {
+  grid-column-gap: 50px;
+  display: flex;
+  .factText {
+    color: #000;
+    margin-bottom: 8px;
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 120%;
+  }
+
+  .factTitle {
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}

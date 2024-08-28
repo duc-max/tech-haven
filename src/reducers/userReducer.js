@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADD_USER, LOGIN } from "../api/authApi";
+import { ADD_USER, LOGIN, LOGOUT } from "../api/authApi";
 
 export const addUser = createAsyncThunk(
   "user/addUser",
@@ -37,6 +37,35 @@ export const login = createAsyncThunk(
     }
   }
 );
+
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${LOGOUT}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Đảm bảo token là hợp lệ
+          },
+        }
+      );
+      // Xóa token khỏi localStorage sau khi logout thành công
+      localStorage.removeItem("token");
+      return response.data;
+    } catch (error) {
+      if (!error?.response) {
+        return rejectWithValue("No Server Response");
+      } else if (error.response?.status === 403) {
+        return rejectWithValue("Forbidden: Token may be invalid or expired");
+      } else {
+        return rejectWithValue("Logout failed");
+      }
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "users",
   initialState: {
@@ -66,6 +95,15 @@ const userSlice = createSlice({
         state.currentUser = action.payload?.data;
       })
       .addCase(login.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.status = "success";
+        state.currentUser = null;
+        state.isLogin = false; // Set isLogin to false on successful logout
+      })
+      .addCase(logout.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
       });

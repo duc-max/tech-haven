@@ -3,14 +3,15 @@ import { CiUser, CiLock } from "react-icons/ci";
 import { FaFacebookF, FaGoogle, FaApple } from "react-icons/fa";
 
 import style from "./Login.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import config from "../../../config";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, setIsLogin } from "../../../reducers/userReducer";
 
 function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [mess, setMess] = useState("");
@@ -21,6 +22,8 @@ function Login() {
       const user = await dispatch(login({ username, password }));
       if (login.fulfilled.match(user)) {
         localStorage.setItem("token", user.payload.data.token);
+        dispatch(setIsLogin(true));
+        navigate(config.router.home);
       } else {
         setMess(user.payload || "Login failed");
       }
@@ -28,7 +31,6 @@ function Login() {
       setMess(error);
     }
   };
-
   return (
     <div
       style={{
@@ -75,6 +77,12 @@ function Login() {
                 />
               </div>
             </div>
+
+            {mess && (
+              <div>
+                <span style={{ color: "red" }}>{mess}</span>
+              </div>
+            )}
             <div className={clsx(style.forgotPass)}>
               <Link>Forgot password?</Link>
             </div>

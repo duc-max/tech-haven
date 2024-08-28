@@ -8,16 +8,22 @@ import { Tooltip, Divider } from "antd";
 import style from "./Header.module.scss";
 import config from "../../config/index";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsLogin } from "../../reducers/userReducer";
+import { logout, setIsLogin } from "../../reducers/userReducer";
 
 function Header() {
   const dispatch = useDispatch();
   const { isLogin, currentUser } = useSelector((prev) => prev.users);
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      dispatch(setIsLogin(true));
-    }
-  }, [isLogin, dispatch]);
+  const handleLogut = () => {
+    dispatch(logout())
+      .unwrap() // unwrap giúp lấy dữ liệu từ promise nếu thành công
+      .then(() => {
+        console.log("Logged out successfully");
+        // Redirect hoặc thông báo cho người dùng sau khi logout
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+  };
   return (
     <div className={clsx(style.headerContainer)}>
       <Navbar expand="lg" style={{ padding: "8px 0", height: "100%" }}>
@@ -32,24 +38,27 @@ function Header() {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                  <Nav.Link className={clsx(style.navLink)} href="">
+                  <Link className={clsx(style.navLink)} to={config.router.shop}>
                     Shop
-                  </Nav.Link>
-                  <Nav.Link className={clsx(style.navLink)} href="">
+                  </Link>
+                  <Link className={clsx(style.navLink)} href="">
                     Categories
-                  </Nav.Link>
-                  <Nav.Link className={clsx(style.navLink)} href="">
+                  </Link>
+                  <Link
+                    className={clsx(style.navLink)}
+                    to={config.router.about}
+                  >
                     About us
-                  </Nav.Link>
-                  <Nav.Link className={clsx(style.navLink)} href="">
+                  </Link>
+                  <Link className={clsx(style.navLink)} href="">
                     Blogs
-                  </Nav.Link>
-                  <Nav.Link className={clsx(style.navLink)} href="">
+                  </Link>
+                  <Link className={clsx(style.navLink)} href="">
                     Reviews
-                  </Nav.Link>
-                  <Nav.Link className={clsx(style.navLink)} href="">
+                  </Link>
+                  <Link className={clsx(style.navLink)} href="">
                     Contact us
-                  </Nav.Link>
+                  </Link>
                 </Nav>
               </Navbar.Collapse>
             </>
@@ -73,7 +82,10 @@ function Header() {
                         <span>Order</span>
                       </div>
                       <Divider style={{ margin: "2px 0" }} />
-                      <div className={clsx(style.userList)}>
+                      <div
+                        onClick={handleLogut}
+                        className={clsx(style.userList)}
+                      >
                         <span>Logout</span>
                       </div>
                     </div>
