@@ -2,10 +2,26 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { publicRoutes } from "../src/routers";
-import { Fragment, Suspense } from "react";
+import { Fragment, Suspense, useEffect } from "react";
 import DefaultLayout from "../src/layout/DefaultLayout";
+import { setCurrentUser, setIsLogin, setToken } from "./reducers/userReducer";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("user_data"));
+    if (storedData) {
+      const { userToken, user } = storedData;
+      dispatch(setToken(userToken));
+      dispatch(setCurrentUser(user));
+      dispatch(setIsLogin(true));
+    } else {
+      dispatch(setIsLogin(false));
+    }
+  }, [dispatch]);
+
   return (
     <div>
       <Router>

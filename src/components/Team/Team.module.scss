@@ -1,0 +1,37 @@
+.teamWrap {
+  grid-column-gap: 30px;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-columns: 1fr;
+  display: grid;
+}
+
+.teamImg {
+  background-color: #fafbfc;
+  border-radius: 5px;
+  overflow: hidden;
+  img {
+    object-fit: cover;
+    width: 100%;
+    min-height: 360px;
+    max-height: 360px;
+    vertical-align: middle;
+    max-width: 100%;
+    display: inline-block;
+  }
+}
+
+.teamData {
+  margin-top: 12px;
+  .bodySmall {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 150%;
+  }
+
+  .memberName {
+    margin-top: 2px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}

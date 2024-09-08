@@ -1,6 +1,12 @@
-import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADD_USER, LOGIN, LOGOUT } from "../api/authApi";
+import axios from "axios";
+import {
+  ADD_USER,
+  LOGIN,
+  LOGOUT,
+  GET_CURRENT_USER,
+  UPDATE_USER,
+} from "../api/authApi";
 
 export const addUser = createAsyncThunk(
   "user/addUser",
@@ -24,7 +30,7 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${LOGIN}`, { username, password });
+      const response = await axios.post(LOGIN, { username, password });
       return response.data;
     } catch (error) {
       if (!error?.response) {
@@ -33,6 +39,50 @@ export const login = createAsyncThunk(
         return rejectWithValue("Invalid Username or Password");
       } else {
         return rejectWithValue("Login failed");
+      }
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async ({ token, user }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${UPDATE_USER}`, user, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (!error?.response) {
+        return rejectWithValue("No Server Response");
+      } else if (error.response?.status === 404) {
+        return rejectWithValue("No user found");
+      } else {
+        return rejectWithValue("Failed to fetch user");
+      }
+    }
+  }
+);
+
+export const fetchCurrentUser = createAsyncThunk(
+  "user/fetchCurrentUser",
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${GET_CURRENT_USER}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (!error?.response) {
+        return rejectWithValue("No Server Response");
+      } else if (error.response?.status === 401) {
+        return rejectWithValue("Invalid Token");
+      } else {
+        return rejectWithValue("Failed to fetch user");
       }
     }
   }
@@ -47,12 +97,12 @@ export const logout = createAsyncThunk(
         {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Đảm bảo token là hợp lệ
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      // Xóa token khỏi localStorage sau khi logout thành công
       localStorage.removeItem("token");
+      localStorage.removeItem("user_data");
       return response.data;
     } catch (error) {
       if (!error?.response) {
@@ -74,10 +124,17 @@ const userSlice = createSlice({
     error: null,
     currentUser: null,
     isLogin: false,
+    token: null,
   },
   reducers: {
     setIsLogin(state, action) {
       state.isLogin = action.payload;
+    },
+    setToken(state, action) {
+      state.token = action.payload;
+    },
+    setCurrentUser(state, action) {
+      state.currentUser = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -91,17 +148,40 @@ const userSlice = createSlice({
       })
 
       .addCase(login.fulfilled, (state, action) => {
+        const { token, user } = action.payload;
         state.status = "success";
-        state.currentUser = action.payload?.data;
+        state.token = token;
+        state.currentUser = user;
+        state.isLogin = true;
       })
       .addCase(login.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.status = "success";
+        state.currentUser = action.payload?.data;
+        state.isLogin = true;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
+        state.isLogin = false;
+        state.currentUser = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = "success";
+        state.currentUser = action.payload;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
       })
       .addCase(logout.fulfilled, (state) => {
         state.status = "success";
         state.currentUser = null;
-        state.isLogin = false; // Set isLogin to false on successful logout
+        state.isLogin = false;
+        state.token = null;
       })
       .addCase(logout.rejected, (state, action) => {
         state.status = "failed";
@@ -110,5 +190,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setIsLogin } = userSlice.actions;
+export const { setIsLogin, setToken, setCurrentUser } = userSlice.actions;
 export default userSlice.reducer;

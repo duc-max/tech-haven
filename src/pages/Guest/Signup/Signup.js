@@ -17,6 +17,8 @@ function Signup() {
     name: "",
     phone: "",
     email: "",
+    gender: "male",
+    dob: "",
     username: "",
     password: "",
   });
@@ -59,7 +61,6 @@ function Signup() {
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {
@@ -109,14 +110,16 @@ function Signup() {
       confirmPassword: "",
     });
 
-    // Dispatch addUser action
     try {
-      const resultAction = await dispatch(addUser(user));
+      const isoDob = user.dob ? new Date(user.dob).toISOString() : "";
+      const resultAction = await dispatch(addUser({ ...user, dob: isoDob }));
       if (addUser.fulfilled.match(resultAction)) {
         setUser({
           name: "",
           phone: "",
           email: "",
+          gender: "male",
+          dob: "",
           username: "",
           password: "",
         });
@@ -129,7 +132,6 @@ function Signup() {
       setMess("An unexpected error occurred.");
     }
   };
-
   return (
     <>
       {contextHolder}
@@ -156,6 +158,35 @@ function Signup() {
                 {errors.name && (
                   <span className={clsx(style.error)}>{errors.name}</span>
                 )}
+              </div>
+
+              <div className={clsx(style.inputWrapHalf)}>
+                <div className={clsx(style.inputBlockHalf)}>
+                  <span className={clsx(style.inputLabel)}>Your dob</span>
+                  <div className={clsx(style.inputBlock)}>
+                    <input
+                      type="date"
+                      placeholder="Enter your dob"
+                      name="dob"
+                      value={user.dob}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className={clsx(style.inputBlockHalf)}>
+                  <span className={clsx(style.inputLabel)}>Gender</span>
+                  <div className={clsx(style.inputBlock)}>
+                    <select
+                      name="gender"
+                      value={user.gender}
+                      onChange={handleChange}
+                    >
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div className={clsx(style.inputWrap)}>

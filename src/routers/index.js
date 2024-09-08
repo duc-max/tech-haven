@@ -4,6 +4,7 @@ import Home from "../pages/Guest/Home/Home";
 import Login from "../pages/Guest/Login/Login";
 import Signup from "../pages/Guest/Signup/Signup";
 import About from "../pages/Guest/About/About";
+import Profile from "../pages/Customer/Profile/Profile";
 const Shop = React.lazy(() => import("../pages/Guest/Shop/Shop"));
 
 const publicRoutes = [
@@ -12,6 +13,7 @@ const publicRoutes = [
   { path: config.router.signup, component: Signup },
   { path: config.router.shop, component: Shop },
   { path: config.router.about, component: About },
+  { path: config.router.profile, component: Profile },
 ];
 
 export { publicRoutes };

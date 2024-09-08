@@ -1,0 +1,31 @@
+.wmImg {
+  background-color: #fafbfc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    min-height: 280px;
+    max-height: 280px;
+    vertical-align: middle;
+    max-width: 100%;
+    display: inline-block;
+    border: 0;
+  }
+}
+
+.wmTitle {
+  color: #000000;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.wmText {
+  margin-bottom: 0;
+  margin-top: 0;
+}

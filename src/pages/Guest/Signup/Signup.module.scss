@@ -32,7 +32,8 @@
   padding-bottom: 49px;
 }
 
-.inputWrap {
+.inputWrap,
+.inputWrapHalf {
   width: 100%;
   position: relative;
   border-bottom: 2px solid #d9d9d9;
@@ -55,8 +56,27 @@
     background: 0 0;
     padding: 0 7px 0 10px;
   }
+  select {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.2;
+    display: block;
+    width: 100%;
+    height: 50px;
+    background: 0 0;
+    padding: 0 7px 0 10px;
+    border: none;
+  }
 }
 
+.inputWrapHalf {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputBlockHalf {
+  width: 40%;
+}
 .inputBlock {
   display: flex;
   align-items: center;

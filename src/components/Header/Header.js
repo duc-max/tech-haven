@@ -1,6 +1,6 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { CiUser, CiShoppingCart, CiSearch } from "react-icons/ci";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 import { Tooltip, Divider } from "antd";
@@ -8,11 +8,11 @@ import { Tooltip, Divider } from "antd";
 import style from "./Header.module.scss";
 import config from "../../config/index";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, setIsLogin } from "../../reducers/userReducer";
+import { logout } from "../../reducers/userReducer";
 
 function Header() {
   const dispatch = useDispatch();
-  const { isLogin, currentUser } = useSelector((prev) => prev.users);
+  const { isLogin } = useSelector((prev) => prev.users);
   const handleLogut = () => {
     dispatch(logout())
       .unwrap() // unwrap giúp lấy dữ liệu từ promise nếu thành công
@@ -75,9 +75,11 @@ function Header() {
                   trigger="click"
                   title={
                     <div>
-                      <div className={clsx(style.userList)}>
-                        <span>Profile</span>
-                      </div>
+                      <Link to={config.router.profile}>
+                        <div className={clsx(style.userList)}>
+                          <span>Profile</span>
+                        </div>
+                      </Link>
                       <div className={clsx(style.userList)}>
                         <span>Order</span>
                       </div>

@@ -1,0 +1,54 @@
+.journeyWrap {
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-columns: 1fr;
+  display: grid;
+}
+
+.journeyBlock {
+  grid-row-gap: 60px;
+  background-color: #cce3e8;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 60px 40px;
+  display: flex;
+}
+
+.journeyData {
+  h4 {
+    margin-bottom: 20px;
+    color: #000000;
+    margin-top: 0;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.journeyBlock {
+  &.journeyMission {
+    background-color: #edd5cb;
+  }
+}
+
+.journeyImg {
+  grid-area: span 1 / span 2 / span 1 / span 2;
+
+  background-color: #fafbfc;
+  position: relative;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    max-width: 100%;
+    display: inline-block;
+  }
+}

@@ -1,13 +1,17 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { CiUser, CiLock } from "react-icons/ci";
 import { FaFacebookF, FaGoogle, FaApple } from "react-icons/fa";
-
 import style from "./Login.module.scss";
-import { Link, useNavigate } from "react-router-dom";
 import config from "../../../config";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { login, setIsLogin } from "../../../reducers/userReducer";
+import {
+  login,
+  setIsLogin,
+  setToken,
+  setCurrentUser,
+} from "../../../reducers/userReducer";
 
 function Login() {
   const dispatch = useDispatch();
@@ -19,25 +23,29 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await dispatch(login({ username, password }));
-      if (login.fulfilled.match(user)) {
-        localStorage.setItem("token", user.payload.data.token);
+      const resultAction = await dispatch(login({ username, password }));
+      if (login.fulfilled.match(resultAction)) {
+        const { token, user } = resultAction.payload;
+        localStorage.setItem("token", token);
+        localStorage.setItem(
+          "user_data",
+          JSON.stringify({ userToken: token, user })
+        );
+
+        dispatch(setToken(token));
+        dispatch(setCurrentUser(user));
         dispatch(setIsLogin(true));
         navigate(config.router.home);
       } else {
-        setMess(user.payload || "Login failed");
+        setMess(resultAction.payload || "Login failed");
       }
     } catch (error) {
-      setMess(error);
+      setMess(error.message || "Login failed");
     }
   };
+
   return (
-    <div
-      style={{
-        width: "100%",
-        margin: "0 auto",
-      }}
-    >
+    <div style={{ width: "100%", margin: "0 auto" }}>
       <div
         style={{ backgroundImage: "url(./assets/images/bg01.jpg)" }}
         className={clsx(style.loginContainer)}
@@ -55,9 +63,7 @@ function Login() {
                   name="username"
                   autoComplete="username"
                   value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                  }}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
             </div>
@@ -71,9 +77,7 @@ function Login() {
                   name="password"
                   autoComplete="new-password"
                   value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -88,14 +92,14 @@ function Login() {
             </div>
 
             <div className={clsx(style.btnLoginWrap)}>
-              <button>Login</button>
+              <button type="submit">Login</button>
             </div>
 
             <div className={clsx(style.formText, "text-center")}>
               <span>Or Sign Up Using</span>
             </div>
             <div className={clsx(style.loginGroup)}>
-              <a href="/" style={{ backgroundColor: " #3b5998" }}>
+              <a href="/" style={{ backgroundColor: "#3b5998" }}>
                 <FaFacebookF />
               </a>
               <a href="/" style={{ backgroundColor: "#ea4335" }}>
