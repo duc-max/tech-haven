@@ -2,23 +2,24 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { CiUser, CiShoppingCart, CiSearch } from "react-icons/ci";
 import { Fragment } from "react";
 import clsx from "clsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Tooltip, Divider } from "antd";
 
 import style from "./Header.module.scss";
 import config from "../../config/index";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reducers/userReducer";
+import router from "../../config/router";
 
 function Header() {
   const dispatch = useDispatch();
-  const { isLogin } = useSelector((prev) => prev.users);
+  const navigate = useNavigate();
+  const { isLogin, currentUser } = useSelector((prev) => prev.users);
   const handleLogut = () => {
     dispatch(logout())
       .unwrap() // unwrap giúp lấy dữ liệu từ promise nếu thành công
       .then(() => {
-        console.log("Logged out successfully");
-        // Redirect hoặc thông báo cho người dùng sau khi logout
+        navigate(router.home);
       })
       .catch((error) => {
         console.error("Logout error:", error);
@@ -98,7 +99,10 @@ function Header() {
                 >
                   <div className={clsx(style.userAvatar)}>
                     <img
-                      src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+                      src={
+                        currentUser?.avatar ||
+                        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+                      }
                       alt="avatar"
                     />
                   </div>

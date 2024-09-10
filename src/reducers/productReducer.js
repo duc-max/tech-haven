@@ -1,15 +1,12 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  GET_PRODUCT,
-  GET_PRODUCT_BESTSELLING,
-  GET_PRODUCT_LATEST,
-} from "../api/productApi";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async ({ page }) => {
-    const response = await axios.get(`${GET_PRODUCT}?page=${page}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_GET_PRODUCT}?page=${page}`
+    );
     return response.data;
   }
 );
@@ -17,7 +14,9 @@ export const fetchProducts = createAsyncThunk(
 export const getProductsBest = createAsyncThunk(
   "products/getProductsBest",
   async () => {
-    const response = await axios.get(`${GET_PRODUCT_BESTSELLING}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_GET_PRODUCT_BESTSELLING}`
+    );
     return response.data;
   }
 );
@@ -25,7 +24,9 @@ export const getProductsBest = createAsyncThunk(
 export const getProductsLatest = createAsyncThunk(
   "products/getProductsLatest",
   async () => {
-    const response = await axios.get(`${GET_PRODUCT_LATEST}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_GET_PRODUCT_LATEST}`
+    );
     return response.data;
   }
 );

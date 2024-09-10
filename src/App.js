@@ -1,11 +1,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Fragment, Suspense, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
 import { publicRoutes } from "../src/routers";
-import { Fragment, Suspense, useEffect } from "react";
 import DefaultLayout from "../src/layout/DefaultLayout";
 import { setCurrentUser, setIsLogin, setToken } from "./reducers/userReducer";
-import { useDispatch } from "react-redux";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ function App() {
     <div>
       <Router>
         <div className="App">
+          <ToastContainer />
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               {publicRoutes.map((route, index) => {

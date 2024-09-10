@@ -1,22 +1,33 @@
 import clsx from "clsx";
 import style from "./Account.module.scss";
+import { toast } from "react-toastify";
+
 import { Divider } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../reducers/userReducer";
+import { setCurrentUser, updateUser } from "../../reducers/userReducer";
+import { uploadImg } from "../../utils/upload_file";
 
 function Account({ currentUser }) {
   const dispatch = useDispatch();
+  const fileInputRef = useRef(null);
+
   const [user, setUser] = useState({
     name: "",
     phone: "",
     email: "",
     gender: "",
     dob: "",
+    avatar: "",
     username: "",
     password: "",
   });
   const token = useSelector((state) => state.users.token);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(
+    user?.avatar ||
+      "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+  );
 
   useEffect(() => {
     if (currentUser) {
@@ -24,18 +35,70 @@ function Account({ currentUser }) {
         ? new Date(currentUser.dob).toISOString().slice(0, 10)
         : "";
       setUser({ ...currentUser, dob: formattedDob });
+      setPreviewUrl(
+        currentUser.avatar ||
+          "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+      );
     }
   }, [currentUser]);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
+
+  const handleGenderChange = (e) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      gender: e.target.value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+      };
+    }
+  };
+
+  const handleChooseFile = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const handleSubmit = async (e) => {
-    if (token) {
-      await dispatch(updateUser({ token, user }));
+    e.preventDefault();
+    try {
+      const img = selectedFile
+        ? await uploadImg(selectedFile, "image", "avatar_preset")
+        : user.avatar;
+      if (token) {
+        const resultAction = await dispatch(
+          updateUser({ token, user: { ...user, avatar: img } })
+        );
+        if (updateUser.fulfilled.match(resultAction)) {
+          dispatch(setCurrentUser(resultAction.payload));
+          localStorage.setItem(
+            "user_data",
+            JSON.stringify({ userToken: token, user: resultAction.payload })
+          );
+          toast.success("Update profile successful");
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
+
   return (
     <div className={clsx(style.accountWrap)}>
       <div className={clsx(style.accountHead)}>
@@ -46,7 +109,7 @@ function Account({ currentUser }) {
 
       <div className={clsx(style.accountForm)}>
         <div className={clsx(style.accountInfo)}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <table>
               <tbody>
                 <tr>
@@ -104,36 +167,64 @@ function Account({ currentUser }) {
                 </tr>
                 <tr>
                   <td className={clsx(style.inputLabel)}>
-                    <label htmlFor="gender">Gender</label>
+                    <label>Gender</label>
                   </td>
                   <td className={clsx(style.inputWrap)}>
-                    <div className={clsx(style.inputBlock)}>
-                      <input
-                        id="gender"
-                        name="gender"
-                        value={user?.gender}
-                        onChange={handleChange}
-                      />
+                    <div className={clsx(style.radioBlock)}>
+                      <label>
+                        <input
+                          type="radio"
+                          name="gender"
+                          value="male"
+                          checked={user?.gender === "male"}
+                          onChange={handleGenderChange}
+                        />
+                        Male
+                      </label>
+
+                      <label>
+                        <input
+                          type="radio"
+                          name="gender"
+                          value="female"
+                          checked={user?.gender === "female"}
+                          onChange={handleGenderChange}
+                        />
+                        Female
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="gender"
+                          value="other"
+                          checked={user?.gender === "other"}
+                          onChange={handleGenderChange}
+                        />
+                        Other
+                      </label>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <input
+              className={clsx(style.inputFile)}
+              ref={fileInputRef}
+              type="file"
+              accept=".jpg, .jpeg"
+              onChange={handleFileChange}
+            />
+            <button className={clsx(style.btnSave)}>Save</button>
           </form>
-          <button onClick={handleSubmit} className={clsx(style.btnSave)}>
-            Save
-          </button>
         </div>
         <div className={clsx(style.accountAvatar)}>
           <div className={clsx(style.accountAvatarWrap)}>
-            <img src="/assets/images/01.png" alt="avatar" />
+            <img src={previewUrl} alt="avatar" />
           </div>
-          <input
-            className={clsx(style.inputFile)}
-            type="file"
-            accept=".jpg, .jpeg"
-          />
-          <button className={clsx(style.btnInput)}>Choose file</button>
+
+          <button className={clsx(style.btnInput)} onClick={handleChooseFile}>
+            Choose file
+          </button>
         </div>
       </div>
     </div>

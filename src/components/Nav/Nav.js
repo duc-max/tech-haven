@@ -10,7 +10,13 @@ function Nav({ user }) {
     <div className={clsx(style.navWrap)}>
       <div className={clsx(style.userInfoWrap)}>
         <div className={clsx(style.userImg)}>
-          <img src="/assets/images/01.png" alt="avatar" />
+          <img
+            src={
+              user?.avatar ||
+              "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+            }
+            alt="avatar"
+          />
         </div>
         <div className={clsx(style.userData)}>
           <p>{user?.name}</p>

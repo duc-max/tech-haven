@@ -59,6 +59,21 @@
   }
 }
 
+.radioBlock {
+  display: flex;
+  align-items: center;
+
+  label {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+
+    input {
+      margin-right: 3px;
+    }
+  }
+}
+
 .accountAvatar {
   display: flex;
   justify-content: center;

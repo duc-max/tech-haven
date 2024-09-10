@@ -1,18 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import {
-  ADD_USER,
-  LOGIN,
-  LOGOUT,
-  GET_CURRENT_USER,
-  UPDATE_USER,
-} from "../api/authApi";
-
 export const addUser = createAsyncThunk(
   "user/addUser",
   async (user, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${ADD_USER}`, user);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_ADD_USER}`,
+        user
+      );
       return response.data;
     } catch (error) {
       if (!error?.response) {
@@ -30,7 +25,10 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(LOGIN, { username, password });
+      const response = await axios.post(process.env.REACT_APP_API_LOGIN, {
+        username,
+        password,
+      });
       return response.data;
     } catch (error) {
       if (!error?.response) {
@@ -48,11 +46,15 @@ export const updateUser = createAsyncThunk(
   "user/updateUser",
   async ({ token, user }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${UPDATE_USER}`, user, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_UPDATE_USER}`,
+        user,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       if (!error?.response) {
@@ -70,11 +72,14 @@ export const fetchCurrentUser = createAsyncThunk(
   "user/fetchCurrentUser",
   async (token, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${GET_CURRENT_USER}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_GET_CURRENT_USER}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       if (!error?.response) {
@@ -93,7 +98,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${LOGOUT}`,
+        `${process.env.REACT_APP_API_LOGOUT}`,
         {},
         {
           headers: {
