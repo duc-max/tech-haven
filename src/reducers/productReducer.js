@@ -31,6 +31,16 @@ export const getProductsLatest = createAsyncThunk(
   }
 );
 
+export const getProductById = createAsyncThunk(
+  "products/getProductById",
+  async (id) => {
+    const response = await axios.get(
+      `http://localhost:8080/api/products/${id}`
+    );
+    return response.data;
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -43,6 +53,7 @@ const productSlice = createSlice({
     perPage: 10,
     status: "idle",
     error: null,
+    product: null,
   },
   reducers: {
     setPage: (state, action) => {
@@ -81,6 +92,10 @@ const productSlice = createSlice({
       .addCase(getProductsLatest.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.productsLatest = action.payload;
+      })
+      .addCase(getProductById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.product = action.payload;
       });
   },
 });

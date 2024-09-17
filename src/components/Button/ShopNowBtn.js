@@ -3,13 +3,24 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import clsx from "clsx";
 import style from "./Button.module.scss";
 import config from "../../config";
-function ShowNowBtn() {
+function ShowNowBtn({
+  title = "Shop Now",
+  icon = <IoIosArrowRoundForward style={{ fontSize: "20px" }} />,
+  add = false,
+}) {
   return (
     <>
-      <Link to={config.router.shop} className={clsx(style.showNowBtn)}>
-        Shop now
-        <IoIosArrowRoundForward style={{ fontSize: "20px" }} />
-      </Link>
+      {add ? (
+        <button className={clsx(style.showNowBtn)}>
+          {title}
+          {icon}
+        </button>
+      ) : (
+        <Link to={config.router.shop} className={clsx(style.showNowBtn)}>
+          {title}
+          {icon}
+        </Link>
+      )}
     </>
   );
 }

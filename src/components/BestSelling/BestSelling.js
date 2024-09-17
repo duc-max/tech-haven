@@ -1,5 +1,4 @@
 import { Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -23,9 +22,7 @@ function BestSelling() {
             {productBest.map((product, index) => {
               return (
                 <Col md={3} key={index}>
-                  <Link>
-                    <ProductItem product={product} />
-                  </Link>
+                  <ProductItem product={product} />
                 </Col>
               );
             })}

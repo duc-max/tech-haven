@@ -33,9 +33,7 @@ function Shop() {
           <Row>
             {products.map((product, index) => (
               <Col md={3} key={index}>
-                <Link>
-                  <ProductItem product={product} />
-                </Link>
+                <ProductItem product={product} />
               </Col>
             ))}
           </Row>

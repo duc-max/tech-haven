@@ -1,20 +1,27 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { CiUser, CiShoppingCart, CiSearch } from "react-icons/ci";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import clsx from "clsx";
 import { Link, useNavigate } from "react-router-dom";
 import { Tooltip, Divider } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 
 import style from "./Header.module.scss";
 import config from "../../config/index";
-import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reducers/userReducer";
 import router from "../../config/router";
+import { fetchCart } from "../../reducers/cartReducer";
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLogin, currentUser } = useSelector((prev) => prev.users);
+  const { addSuccess, cartItem, carts } = useSelector((state) => state.carts);
+
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch, cartItem]);
+
   const handleLogut = () => {
     dispatch(logout())
       .unwrap() // unwrap giúp lấy dữ liệu từ promise nếu thành công
@@ -25,6 +32,7 @@ function Header() {
         console.error("Logout error:", error);
       });
   };
+
   return (
     <div className={clsx(style.headerContainer)}>
       <Navbar expand="lg" style={{ padding: "8px 0", height: "100%" }}>
@@ -112,7 +120,48 @@ function Header() {
                   <CiUser className={clsx(style.headerIcon)} />
                 </Link>
               )}
-              <CiShoppingCart className={clsx(style.headerIcon)} />
+              <Link to={config.router.cart}>
+                <div className={clsx(style.cartIcon)}>
+                  <Tooltip
+                    open={addSuccess}
+                    title={
+                      <div>
+                        <div className={clsx(style.cartDropdown)}>
+                          <div className={clsx(style.lintStt)}>
+                            Add to cart successfully
+                          </div>
+                          <div className={clsx(style.cartItem)}>
+                            <div className={clsx(style.cartImg)}>
+                              <img src={cartItem?.images} alt="cart item" />
+                            </div>
+                            <div className={clsx(style.cartTitle)}>
+                              {cartItem?.productName}
+                            </div>
+                          </div>
+                          <div className={clsx(style.cartBtn)}>
+                            <Link>View cart</Link>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    color="#fff"
+                    overlayStyle={{ width: 320 }}
+                    overlayInnerStyle={{ padding: "0" }}
+                  >
+                    <CiShoppingCart className={clsx(style.headerIcon)} />
+
+                    <div className={clsx(style.cartCount)}>
+                      <span>
+                        {carts
+                          .filter((cart) => {
+                            return cart.userId === currentUser?._id;
+                          })
+                          .reduce((acc, cart) => acc + cart.quantity, 0)}
+                      </span>
+                    </div>
+                  </Tooltip>
+                </div>
+              </Link>
             </div>
           </Fragment>
         </Container>
