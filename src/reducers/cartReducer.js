@@ -15,7 +15,7 @@ export const addToCart = createAsyncThunk("carts/addToCart", async (data) => {
 });
 
 export const plusItem = createAsyncThunk("carts/plusItem", async (data) => {
-  const res = await axios.post(
+  const res = await axios.put(
     `${process.env.REACT_APP_API_CART_PLUS_ITEM}`,
     data
   );
@@ -23,7 +23,7 @@ export const plusItem = createAsyncThunk("carts/plusItem", async (data) => {
 });
 
 export const minusItem = createAsyncThunk("carts/minusItem", async (data) => {
-  const res = await axios.post(
+  const res = await axios.put(
     `${process.env.REACT_APP_API_CART_MINUS_ITEM}`,
     data
   );
@@ -45,6 +45,35 @@ export const removeItem = createAsyncThunk(
   }
 );
 
+export const removeAllItem = createAsyncThunk(
+  "carts/removeItem",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await axios.delete(
+        `${process.env.REACT_APP_API_CART_REMOVE_ALL_ITEM}${id}`
+      );
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const payment = createAsyncThunk("carts/payment", async (products) => {
+  const res = await axios.post(
+    `${process.env.REACT_APP_API_CART_CHECKOUT}`,
+    products
+  );
+  return res;
+});
+
+export const addOrder = createAsyncThunk("carts/addOrder", async (order) => {
+  const res = await axios.post(
+    `${process.env.REACT_APP_API_CART_ORDER}`,
+    order
+  );
+  return res;
+});
 const cartSlice = createSlice({
   name: "carts",
   initialState: {

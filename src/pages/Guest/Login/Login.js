@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { CiUser, CiLock } from "react-icons/ci";
@@ -31,16 +31,20 @@ function Login() {
           "user_data",
           JSON.stringify({ userToken: token, user })
         );
-
+        console.log(user);
         dispatch(setToken(token));
         dispatch(setCurrentUser(user));
         dispatch(setIsLogin(true));
-        navigate(config.router.home);
+        if (user.role === "admin") {
+          navigate(config.router.admin);
+        } else {
+          navigate(config.router.home);
+        }
       } else {
-        setMess(resultAction.payload || "Login failed");
+        setMess("Username or password invalid");
       }
     } catch (error) {
-      setMess(error.message || "Login failed");
+      setMess("Username or password invalid");
     }
   };
 

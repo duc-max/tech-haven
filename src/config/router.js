@@ -8,6 +8,8 @@ const router = {
   productDetail: "/product-detail/:id",
   cart: "/cart",
   checkout: "/checkout",
+  success: "/success",
+  admin: "/admin/home",
 };
 
 export default router;

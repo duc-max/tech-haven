@@ -1,23 +1,51 @@
 import clsx from "clsx";
-import style from "./Checkout.module.scss";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import config from "../../../config";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addOrder,
+  fetchCart,
+  removeAllItem,
+} from "../../../reducers/cartReducer";
+import { loadStripe } from "@stripe/stripe-js";
+
 import ItemCheckout from "../../../components/ItemCheckout/ItemCheckout";
-import router from "../../../config/router";
+import config from "../../../config";
+import style from "./Checkout.module.scss";
 
 function Checkout() {
+  const dispatch = useDispatch();
+  const { carts } = useSelector((state) => state.carts);
+  const { isLogin } = useSelector((state) => state.users);
+
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [ward, setWard] = useState("");
+  const [address, setAddress] = useState("");
+  const [error, setError] = useState("");
+  const [cartUser, setCartUser] = useState([]);
+  const [user, setUser] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
   useEffect(() => {
     fetchAddress();
-  }, []);
+    dispatch(fetchCart());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user_data"))?.user;
+    if (user) {
+      setCartUser(carts.filter((cart) => cart.userId === user._id));
+      setUser(user);
+    }
+  }, [carts]);
 
   useEffect(() => {
     if (province) {
@@ -29,7 +57,6 @@ function Checkout() {
       setWards(selectedDistrict?.Wards);
     }
   }, [province, provinces, district, districts]);
-
   const fetchAddress = async () => {
     const res = await axios.get(
       "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
@@ -37,6 +64,57 @@ function Checkout() {
 
     if (res && res.data) {
       setProvinces(res.data);
+    }
+  };
+
+  const totalBill = () => {
+    return cartUser
+      .reduce((pre, current) => {
+        return pre + current.subTotal;
+      }, 0)
+      .toFixed(2);
+  };
+  const handlePayment = async (e) => {
+    e.preventDefault();
+
+    if (address) {
+      const stripe = await loadStripe(
+        "pk_test_51PzvPL2M4x62CqEYHNao7Tb4bOfchM5OAwReMsT3q6lw33JxGA7X3bfKq9biFSCMV0ZujCbzmfh0WrhzMXGyDeRY00zEewLc3W"
+      );
+      const body = {
+        products: cartUser,
+      };
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      const response = await fetch(
+        `${process.env.REACT_APP_API_CART_CHECKOUT}`,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(body),
+        }
+      );
+
+      const session = await response.json();
+
+      const user = JSON.parse(localStorage.getItem("user_data")).user;
+      const order = {
+        customerName: user.name,
+        items: cartUser,
+        totalAmount: totalBill(),
+        address: address,
+        status: "Delivered",
+        paymentMethod: "banking",
+      };
+      dispatch(addOrder(order));
+      dispatch(removeAllItem(user._id));
+      await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+    } else {
+      setError("Please enter shipping address");
     }
   };
 
@@ -77,7 +155,14 @@ function Checkout() {
                   <div>
                     <Row>
                       <div className={clsx(style.formGroup)}>
-                        <input type="text" className={clsx(style.formInput)} />
+                        <input
+                          type="text"
+                          className={clsx(style.formInput, {
+                            [style.disableInput]: isLogin,
+                          })}
+                          value={user?.name}
+                          readOnly
+                        />
                         <span
                           className={clsx(style.formLabel, style.activeLabel)}
                         >
@@ -88,7 +173,11 @@ function Checkout() {
                         <div className={clsx(style.formGroup)}>
                           <input
                             type="email"
-                            className={clsx(style.formInput)}
+                            className={clsx(style.formInput, {
+                              [style.disableInput]: isLogin,
+                            })}
+                            value={user?.email}
+                            readOnly
                           />
                           <span
                             className={clsx(style.formLabel, style.activeLabel)}
@@ -101,7 +190,11 @@ function Checkout() {
                         <div className={clsx(style.formGroup)}>
                           <input
                             type="text"
-                            className={clsx(style.formInput)}
+                            className={clsx(style.formInput, {
+                              [style.disableInput]: isLogin,
+                            })}
+                            value={user?.phone}
+                            readOnly
                           />
                           <span
                             className={clsx(style.formLabel, style.activeLabel)}
@@ -112,12 +205,20 @@ function Checkout() {
                       </Col>
 
                       <div className={clsx(style.formGroup)}>
-                        <input type="text" className={clsx(style.formInput)} />
+                        <input
+                          type="text"
+                          className={clsx(style.formInput)}
+                          value={address}
+                          onChange={(e) => {
+                            setAddress(e.target.value);
+                          }}
+                        />
                         <span
                           className={clsx(style.formLabel, style.activeLabel)}
                         >
                           Address
                         </span>
+                        {error && <span style={{ color: "red" }}>{error}</span>}
                       </div>
                       <Col md={4}>
                         <div className={clsx(style.formGroup)}>
@@ -233,7 +334,8 @@ function Checkout() {
                 </div>
                 <div className={style.stepFooter}>
                   <Link to={config.router.cart}>Cart</Link>
-                  <form>
+
+                  <form onSubmit={handlePayment}>
                     <input type="hidden" />
                     <button>Complete order</button>
                   </form>
@@ -246,7 +348,12 @@ function Checkout() {
           <Col md={6}>
             <div className={clsx(style.sideBar)}>
               <div className={clsx(style.cartItemWrap)}>
-                <ItemCheckout />
+                <div>
+                  {cartUser &&
+                    cartUser.map((item, index) => {
+                      return <ItemCheckout product={item} key={index} />;
+                    })}
+                </div>
                 <div className={clsx(style.discount)}>
                   <Row>
                     <Col md={8}>
@@ -271,7 +378,7 @@ function Checkout() {
                 <div className={clsx(style.subtotal)}>
                   <div className={clsx(style.wrapCost)}>
                     <span>Subtotal </span>
-                    <span>415,000₫</span>
+                    <span>{totalBill()} $</span>
                   </div>
                   <div className={clsx(style.wrapCost)}>
                     <span>Shipping fee </span>
@@ -282,7 +389,7 @@ function Checkout() {
                 <div className={clsx(style.subtotal)}>
                   <div className={clsx(style.wrapCost)}>
                     <span className={clsx(style.total)}>Total </span>
-                    <span className={clsx(style.price)}>415,000₫</span>
+                    <span className={clsx(style.price)}>{totalBill()} $</span>
                   </div>
                 </div>
               </div>

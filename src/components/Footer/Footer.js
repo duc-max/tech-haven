@@ -5,7 +5,11 @@ import style from "./Footer.module.scss";
 import { Link } from "react-router-dom";
 function Footer() {
   return (
-    <footer style={{ backgroundColor: "#000" }}>
+    <footer
+      style={{
+        backgroundColor: "#000",
+      }}
+    >
       <Container>
         <div className={clsx(style.footerWrap)}>
           <div className={clsx(style.footerData)}>

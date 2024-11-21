@@ -14,7 +14,7 @@ import {
   getProductById,
   getProductsBest,
 } from "../../../reducers/productReducer";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addToCart, setAddSuccess } from "../../../reducers/cartReducer";
 
 const CustomTabs = styled(Tabs)`
@@ -45,7 +45,8 @@ function ProductDetail() {
   const dispatch = useDispatch();
   let { id } = useParams();
   const { productBest, product } = useSelector((state) => state.products);
-
+  const { isLogin } = useSelector((state) => state.users);
+  const navigate = useNavigate();
   const [cartField, setCartField] = useState({});
   const [quantity, setQuantity] = useState(1);
 
@@ -77,19 +78,23 @@ function ProductDetail() {
 
   const handleAddToCart = (e) => {
     e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user_data"))?.user;
-    cartField.productName = product?.name;
-    cartField.images = product?.images[0];
-    cartField.price = product?.price;
-    cartField.quantity = quantity;
-    cartField.subTotal = product?.price * quantity;
-    cartField.productId = product?._id;
-    cartField.userId = user?._id;
-    dispatch(addToCart(cartField));
-    dispatch(setAddSuccess(true));
-    setTimeout(() => {
-      dispatch(setAddSuccess(false));
-    }, 3000);
+    if (isLogin) {
+      const user = JSON.parse(localStorage.getItem("user_data"))?.user;
+      cartField.productName = product?.name;
+      cartField.images = product?.images[0];
+      cartField.price = product?.price;
+      cartField.quantity = quantity;
+      cartField.subTotal = product?.price * quantity;
+      cartField.productId = product?._id;
+      cartField.userId = user?._id;
+      dispatch(addToCart(cartField));
+      dispatch(setAddSuccess(true));
+      setTimeout(() => {
+        dispatch(setAddSuccess(false));
+      }, 3000);
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -163,6 +168,7 @@ function ProductDetail() {
                             className={clsx(style.quantityBtn)}
                           />
                         </div>
+
                         <ShowNowBtn
                           title="Add to Cart"
                           icon={<IoCartOutline style={{ fontSize: "20px" }} />}

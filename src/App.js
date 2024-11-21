@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { publicRoutes } from "../src/routers";
 import DefaultLayout from "../src/layout/DefaultLayout";
 import { setCurrentUser, setIsLogin, setToken } from "./reducers/userReducer";
+import DashboardLayout from "./layout/Dashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -38,6 +39,8 @@ function App() {
                   Layout = route.layout;
                 } else if (route.layout === null) {
                   Layout = Fragment;
+                } else if (route.header === null) {
+                  Layout = DashboardLayout;
                 }
                 return (
                   <Route

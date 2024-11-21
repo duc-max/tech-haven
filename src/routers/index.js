@@ -8,6 +8,8 @@ import Profile from "../pages/Customer/Profile/Profile";
 import ProductDetail from "../pages/Guest/Product-detail/Product-detail";
 import Cart from "../pages/Guest/Cart/Cart";
 import Checkout from "../pages/Guest/Checkout/Checkout";
+import Success from "../pages/Success/Success";
+import HomeAdmin from "../pages/Admin/Home/home";
 const Shop = React.lazy(() => import("../pages/Guest/Shop/Shop"));
 
 const publicRoutes = [
@@ -20,6 +22,8 @@ const publicRoutes = [
   { path: config.router.productDetail, component: ProductDetail },
   { path: config.router.cart, component: Cart },
   { path: config.router.checkout, component: Checkout, layout: null },
+  { path: config.router.success, component: Success, layout: null },
+  { path: config.router.admin, component: HomeAdmin, header: null },
 ];
 
 export { publicRoutes };
